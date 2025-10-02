@@ -1,0 +1,221 @@
+<html>
+<head>
+    <title>Ex 51 - Nguyễn Thị Bảo Trân</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: "Times New Roman", serif;
+            background-color: #20B2AA;
+        }
+        
+        .container {
+            width: 700px;
+            margin: 0 auto;
+            background-color: #20B2AA;
+            border: 3px solid #0000FF;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: #20B2AA;
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 0;
+        }
+        
+        .header-image {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .hospital-name {
+            color: #FFA500;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+        }
+        
+        .hospital-subtitle {
+            color: #FFA500;
+            font-size: 16px;
+            margin: 0 0 10px 0;
+        }
+        
+        .cross {
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .form-title {
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .form-content {
+            padding: 0 20px 20px 20px;
+        }
+        
+        .form-row {
+            margin-bottom: 15px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .form-row label {
+            display: inline-block;
+            width: 150px;
+            vertical-align: top;
+        }
+        
+        .form-row input[type="text"], .form-row input[type="date"] {
+            padding: 3px;
+            border: 1px solid #000;
+            font-size: 12px;
+            font-family: "Times New Roman", serif;
+        }
+        
+        .name-inputs {
+            display: inline-block;
+        }
+        
+        .name-inputs input {
+            width: 120px;
+            margin-right: 10px;
+        }
+        
+        .short-input {
+            width: 80px;
+        }
+        
+        .medium-input {
+            width: 120px;
+        }
+        
+        .physician-select {
+            width: 200px;
+            height: 80px;
+            padding: 3px;
+            border: 1px solid #000;
+            font-size: 12px;
+            font-family: "Times New Roman", serif;
+            background-color: white;
+        }
+        
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+            padding-bottom: 20px;
+        }
+        
+        .buttons button {
+            padding: 8px 20px;
+            margin: 0 10px;
+            font-size: 14px;
+            font-family: "Times New Roman", serif;
+            border: 2px solid #000;
+            background-color: #E0E0E0;
+            cursor: pointer;
+        }
+        
+        .buttons button:hover {
+            background-color: #D0D0D0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="images/Logo.gif" alt="Logo" class="header-image">
+            <div class="form-title">Newborn Registration</div>
+        </div>
+        
+        <div class="form-content">
+            <form>
+                <div class="form-row">
+                    <label>Date:</label>
+                    <input type="text" placeholder="mm/dd/yy" class="medium-input">
+                </div>
+                
+                <div class="form-row">
+                    <label>1) Infant's first name:</label>
+                    <div class="name-inputs">
+                        <input type="text" class="medium-input">
+                        <span style="color: white;">Last:</span>
+                        <input type="text" class="medium-input">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label>2) Medical Record #:</label>
+                    <input type="text" class="short-input">
+                </div>
+                
+                <div class="form-row">
+                    <label>3) Date of birth:</label>
+                    <input type="text" placeholder="mm/dd/yy" class="medium-input">
+                </div>
+                
+                <div class="form-row">
+                    <label>4) Birth weight:</label>
+                    <input type="text" class="short-input">
+                </div>
+                
+                <div class="form-row">
+                    <label>5) APGAR score:</label>
+                    <input type="text" class="short-input">
+                </div>
+                
+                <div class="form-row">
+                    <label>6) Mother's first name:</label>
+                    <div class="name-inputs">
+                        <input type="text" class="medium-input">
+                        <span style="color: white;">Last:</span>
+                        <input type="text" class="medium-input">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label>7) Father's first name:</label>
+                    <div class="name-inputs">
+                        <input type="text" class="medium-input">
+                        <span style="color: white;">Last:</span>
+                        <input type="text" class="medium-input">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label>8) Physician (check all that apply):</label>
+                    <select multiple class="physician-select">
+                        <option>Dr. Warren Albert</option>
+                        <option>Dr. Maria Alvarez</option>
+                        <option>Dr. Karen Brinkman</option>
+                        <option>Dr. Micheal Kerry</option>
+                    </select>
+                </div>
+                
+                <div class="buttons">
+                    <button type="button" onclick="registerForm()">Register</button>
+                    <button type="button" onclick="cancelForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function registerForm() {
+            alert("Registration submitted successfully!");
+        }
+        
+        function cancelForm() {
+            if (confirm("Are you sure you want to cancel? All data will be lost.")) {
+                document.querySelector('form').reset();
+            }
+        }
+    </script>
+</body>
+</html>
