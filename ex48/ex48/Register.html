@@ -1,0 +1,315 @@
+<html>
+<head>
+    <title>Ex 48 - Nguyễn Thị Bảo Trân</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEEB, #4682B4);
+            font-family: Arial, sans-serif;
+            height: 100vh;
+        }
+        
+        .container {
+            width: 600px;
+            margin: 20px auto;
+            background: linear-gradient(to bottom, #87CEEB, #4682B4);
+            border: 2px solid #000080;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            background: linear-gradient(to bottom, #00FFFF, #008B8B);
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 10px 20px;
+            display: inline-block;
+            box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+        }
+        
+        .logo img {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            vertical-align: middle;
+        }
+        
+        .form-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            margin: 20px 0 10px 0;
+        }
+        
+        .form-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-label {
+            width: 120px;
+            text-align: right;
+            margin-right: 10px;
+            color: #000;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            padding: 3px;
+            border: 1px solid #000;
+            font-size: 12px;
+        }
+        
+        .form-input-short {
+            width: 100px;
+        }
+        
+        .form-input-medium {
+            width: 150px;
+        }
+        
+        .form-input-long {
+            width: 200px;
+        }
+        
+        .form-select {
+            padding: 3px;
+            border: 1px solid #000;
+            font-size: 12px;
+            width: 120px;
+        }
+        
+        .address-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .city-state-zip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .separator {
+            height: 1px;
+            background: #000;
+            margin: 15px 0;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-left: 130px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-left: 130px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .comments-row {
+            margin-bottom: 20px;
+        }
+        
+        .comments-textarea {
+            width: 350px;
+            height: 80px;
+            margin-left: 130px;
+            padding: 5px;
+            border: 1px solid #000;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .button-row {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .form-button {
+            padding: 5px 15px;
+            margin: 0 10px;
+            border: 1px solid #000;
+            background: #E0E0E0;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .form-button:hover {
+            background: #D0D0D0;
+        }
+    </style>
+    <script>
+        function registerProduct() {
+            alert("Registration submitted successfully!");
+        }
+        
+        function resetForm() {
+            document.getElementById("registrationForm").reset();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/Jackson.gif" alt="Jackson Logo" width="30" height="30">
+                <span class="logo-text">Jackson<br>Electronics</span>
+            </div>
+        </div>
+        
+        <div class="form-title">Registration Form</div>
+        <div class="form-subtitle">Register your Jackson Electronics product here</div>
+        
+        <form id="registrationForm">
+            <div class="form-row">
+                <label class="form-label">First Name:</label>
+                <input type="text" class="form-input form-input-medium">
+                <label class="form-label" style="margin-left: 20px;">Last Name:</label>
+                <input type="text" class="form-input form-input-medium">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Address #1:</label>
+                <input type="text" class="form-input form-input-long">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Address #2:</label>
+                <input type="text" class="form-input form-input-long">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">City:</label>
+                <input type="text" class="form-input form-input-medium">
+                <label class="form-label" style="margin-left: 20px;">State:</label>
+                <input type="text" class="form-input form-input-short">
+                <label class="form-label" style="margin-left: 20px;">Zip:</label>
+                <input type="text" class="form-input form-input-short">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Country:</label>
+                <input type="text" class="form-input form-input-medium" value="United States">
+            </div>
+            
+            <div class="separator"></div>
+            
+            <div class="form-row">
+                <label class="form-label">Product:</label>
+                <select class="form-select">
+                    <option>ScanMaster</option>
+                    <option>PrintPro</option>
+                    <option>DataMax</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Date Purchased:</label>
+                <input type="text" class="form-input form-input-medium">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Serial #:</label>
+                <input type="text" class="form-input form-input-medium">
+            </div>
+            
+            <div class="form-row">
+                <label class="form-label">Used for:</label>
+            </div>
+            <div class="radio-group">
+                <div class="radio-item">
+                    <input type="radio" name="usage" id="home">
+                    <label for="home">Home</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="usage" id="business" checked>
+                    <label for="business">Business</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="usage" id="government">
+                    <label for="government">Government</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="usage" id="educational">
+                    <label for="educational">Educational Institution</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" name="usage" id="other">
+                    <label for="other">Other</label>
+                </div>
+            </div>
+            
+            <div class="form-row" style="margin-top: 15px;">
+                <label class="form-label">System (check all that apply):</label>
+            </div>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="windows" checked>
+                    <label for="windows">Windows</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="macintosh">
+                    <label for="macintosh">Macintosh</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="unix">
+                    <label for="unix">UNIX</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="other-system">
+                    <label for="other-system">Other</label>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <div class="comments-row">
+                <label class="form-label">Comments?:</label>
+                <br>
+                <textarea class="comments-textarea" placeholder="Enter your comments here..."></textarea>
+            </div>
+            
+            <div class="button-row">
+                <button type="button" class="form-button" onclick="registerProduct()">Click to register</button>
+                <button type="button" class="form-button" onclick="resetForm()">Click to cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
