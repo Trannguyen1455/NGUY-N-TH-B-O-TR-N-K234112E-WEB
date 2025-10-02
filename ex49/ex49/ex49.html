@@ -1,0 +1,244 @@
+<html>
+<head>
+    <title>Ex 49 - Nguyễn Thị Bảo Trân</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            background-color: #AFEEEE;
+            border: 3px solid #0000FF;
+            padding: 20px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF0000;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        
+        .separator {
+            height: 2px;
+            background-color: #000000;
+            margin: 10px 0 20px 0;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-left: 20px;
+        }
+        
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+        
+        .date-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .date-input {
+            padding: 3px;
+            border: 1px solid #000;
+            font-size: 12px;
+            width: 80px;
+        }
+        
+        .keywords-section {
+            margin-bottom: 20px;
+        }
+        
+        .keywords-input {
+            width: 500px;
+            padding: 5px;
+            border: 1px solid #000;
+            font-size: 12px;
+        }
+        
+        .buttons-section {
+            margin-top: 30px;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .action-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .action-button img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+        
+        .button-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .search-text {
+            color: #008000;
+        }
+        
+        .help-text {
+            color: #0000FF;
+        }
+        
+        .cancel-text {
+            color: #FF0000;
+        }
+    </style>
+    <script>
+        function performSearch() {
+            alert("Search simulation - Displaying search results!");
+        }
+        
+        function showHelp() {
+            alert("Help page - Student optional feature");
+        }
+        
+        function clearForm() {
+            document.getElementById("classifiedForm").reset();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-title">Online Classifieds Search Form</div>
+        <div class="separator"></div>
+        
+        <form id="classifiedForm">
+            <div class="section">
+                <div class="section-title">1) Search for a classified in the following sections:</div>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="employment" value="employment">
+                        <label for="employment">Employment</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="personal" value="personal">
+                        <label for="personal">Personal</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="forsale" value="forsale">
+                        <label for="forsale">For Sale</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="miscellaneous" value="miscellaneous">
+                        <label for="miscellaneous">Miscellaneous</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="housing" value="housing">
+                        <label for="housing">Housing</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" name="section" id="allabove" value="allabove">
+                        <label for="allabove">All of the above</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">2) Search the following publications:</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="midwest" checked>
+                        <label for="midwest">Midwest times</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="modern">
+                        <label for="modern">Modern News</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="employment-today">
+                        <label for="employment-today">Employment Today</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="greatlakes" checked>
+                        <label for="greatlakes">Great Lakes Classifieds</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="middleton">
+                        <label for="middleton">Middleton Daily</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cashtown">
+                        <label for="cashtown">Cashtown Daily News</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="date-section">
+                    <span class="section-title">3) From to</span>
+                    <input type="text" class="date-input" placeholder="mm/dd/yy">
+                    <span class="section-title">to</span>
+                    <input type="text" class="date-input" placeholder="mm/dd/yy">
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="keywords-section">
+                    <div class="section-title">4) Enter a few keywords to describe the classified:</div>
+                    <input type="text" class="keywords-input" placeholder="Enter keywords here...">
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">5) Click one of the options below:</div>
+                <div class="buttons-section">
+                    <div class="button-container">
+                        <a href="#" class="action-button" onclick="performSearch(); return false;">
+                            <img src="Search.gif" alt="Search">
+                            <span class="button-text search-text">Search</span>
+                        </a>
+                        <a href="#" class="action-button" onclick="showHelp(); return false;">
+                            <img src="Help.gif" alt="Help">
+                            <span class="button-text help-text">Help</span>
+                        </a>
+                        <a href="#" class="action-button" onclick="clearForm(); return false;">
+                            <img src="Cancel.gif" alt="Cancel">
+                            <span class="button-text cancel-text">Cancel</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
