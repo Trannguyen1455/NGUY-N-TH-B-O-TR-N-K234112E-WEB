@@ -1,0 +1,159 @@
+<html>
+<head>
+    <title>Ex 52 - Nguyễn Thị Bảo Trân</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border: 2px solid #ccc;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-content {
+            padding: 20px;
+        }
+        
+        .form-row {
+            margin-bottom: 15px;
+        }
+        
+        .form-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-row input[type="text"], 
+        .form-row input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .form-row textarea {
+            width: 100%;
+            height: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        .form-row select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background-color: white;
+        }
+        
+        .two-column {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .left-column {
+            flex: 1;
+        }
+        
+        .right-column {
+            width: 200px;
+        }
+        
+        .send-button {
+            background-color: #8B1538;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .send-button:hover {
+            background-color: #6B1028;
+        }
+        
+        .button-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Contact the editorial office
+        </div>
+        
+        <div class="form-content">
+            <form method="GET" action="result.html">
+                <div class="form-row">
+                    <label for="fullname">Full name</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                
+                <div class="two-column">
+                    <div class="left-column">
+                        <div class="form-row">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" required>
+                        </div>
+                    </div>
+                    
+                    <div class="right-column">
+                        <div class="form-row">
+                            <label for="sendto">Send to</label>
+                            <select id="sendto" name="sendto" required>
+                                <option value="Editorial board" selected>Editorial board</option>
+                                <option value="News Department">News Department</option>
+                                <option value="Board of Perspectives">Board of Perspectives</option>
+                                <option value="World Board">World Board</option>
+                                <option value="Business Department">Business Department</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" required></textarea>
+                </div>
+                
+                <div class="button-container">
+                    <button type="submit" class="send-button">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

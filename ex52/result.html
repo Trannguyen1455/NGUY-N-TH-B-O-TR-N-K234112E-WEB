@@ -1,0 +1,121 @@
+<html>
+<head>
+    <title>Ex 52 - Contact Result - Nguyễn Thị Bảo Trân</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border: 2px solid #ccc;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .data-row {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .data-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .data-value {
+            color: #666;
+            word-wrap: break-word;
+        }
+        
+        .back-button {
+            background-color: #8B1538;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-button:hover {
+            background-color: #6B1028;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Contact Form Submission Result
+        </div>
+        
+        <div class="content">
+            <div class="data-row">
+                <div class="data-label">Full Name:</div>
+                <div class="data-value" id="fullname-value"></div>
+            </div>
+            
+            <div class="data-row">
+                <div class="data-label">Email:</div>
+                <div class="data-value" id="email-value"></div>
+            </div>
+            
+            <div class="data-row">
+                <div class="data-label">Title:</div>
+                <div class="data-value" id="title-value"></div>
+            </div>
+            
+            <div class="data-row">
+                <div class="data-label">Send To:</div>
+                <div class="data-value" id="sendto-value"></div>
+            </div>
+            
+            <div class="data-row">
+                <div class="data-label">Content:</div>
+                <div class="data-value" id="content-value"></div>
+            </div>
+            
+            <a href="Contact.html" class="back-button">Back to Contact Form</a>
+        </div>
+    </div>
+    
+    <script>
+        // Get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+        
+        // Display the form data
+        document.getElementById('fullname-value').textContent = getUrlParameter('fullname');
+        document.getElementById('email-value').textContent = getUrlParameter('email');
+        document.getElementById('title-value').textContent = getUrlParameter('title');
+        document.getElementById('sendto-value').textContent = getUrlParameter('sendto');
+        document.getElementById('content-value').textContent = getUrlParameter('content');
+    </script>
+</body>
+</html>
