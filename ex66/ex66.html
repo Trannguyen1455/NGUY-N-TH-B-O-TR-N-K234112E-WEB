@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Ex66 - Nguyễn Thị Bảo Trân</title>
+    <style>
+    table {
+      border-collapse: collapse;
+      width: 50%;
+      margin: 30px auto;
+      font-family: Arial, sans-serif;
+    }
+    th {
+      background-color: #d6e3cf;
+      font-size: 20px;
+      padding: 10px;
+    }
+    td {
+      border: 1px solid #000;
+      padding: 8px 12px;
+    }
+    tr:hover {
+      background-color: blue;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <table id="studentTable">
+    <thead>
+      <tr><th colspan="2">Student Information</th></tr>
+    </thead>
+    <tbody>
+      <!-- Data will be inserted here by JavaScript -->
+    </tbody>
+  </table>
+
+  <script>
+    // XML string
+    const xmlString = `
+      <student>
+        <id>987456</id>
+        <name>Marie Curie</name>
+        <birthday>7/11/1867</birthday>
+        <gender>Woman</gender>
+      </student>
+    `;
+
+    // Parse XML string
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+    // Get values
+    const id = xmlDoc.getElementsByTagName("id")[0].textContent;
+    const name = xmlDoc.getElementsByTagName("name")[0].textContent;
+    const birthday = xmlDoc.getElementsByTagName("birthday")[0].textContent;
+    const gender = xmlDoc.getElementsByTagName("gender")[0].textContent;
+
+    // Display in table
+    const tableBody = document.querySelector("#studentTable tbody");
+    const rows = [
+      ["Student ID:", id],
+      ["Student Name:", name],
+      ["Birthday:", birthday],
+      ["Gender:", gender]
+    ];
+
+    rows.forEach(([label, value]) => {
+      const row = document.createElement("tr");
+      const td1 = document.createElement("td");
+      const td2 = document.createElement("td");
+      td1.textContent = label;
+      td2.textContent = value;
+      row.appendChild(td1);
+      row.appendChild(td2);
+
+      // Add mouse events
+      row.addEventListener("mouseover", () => {
+        row.style.backgroundColor = "blue";
+        row.style.color = "white";
+      });
+      row.addEventListener("mouseout", () => {
+        row.style.backgroundColor = "white";
+        row.style.color = "black";
+      });
+
+      tableBody.appendChild(row);
+    });
+  </script>
+
+</body>
