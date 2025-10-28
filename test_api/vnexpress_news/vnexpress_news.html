@@ -1,0 +1,220 @@
+<html>
+    <head>
+        <title>Nguyễn Thị Bảo Trân</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+            body { font-family: Arial, sans-serif; margin: 24px; }
+            h1 { margin-bottom: 8px; }
+            .row { margin: 8px 0; }
+            input[type="text"] { width: 520px; padding: 6px 8px; }
+            button { padding: 6px 12px; }
+            table { border-collapse: collapse; width: 100%; max-width: 900px; margin-top: 16px; }
+            thead th { background: #f0f0f0; }
+            td, th { border: 1px solid #ccc; padding: 8px 10px; }
+            caption { text-align: left; margin-bottom: 6px; font-weight: 600; }
+            .source { margin-top: 8px; font-size: 12px; color: #555; }
+            .fa-solid { margin-right: 6px; color: #444; }
+            button i { margin-right: 6px; }
+            .news-title { font-weight: bold; }
+            .news-date { color: #666; font-size: 0.9em; }
+            .news-description { margin-top: 5px; }
+            .news-link { color: #0066cc; text-decoration: none; }
+            .news-link:hover { text-decoration: underline; }
+            .update-info { margin-top: 10px; font-style: italic; color: #666; }
+        </style>
+    </head>
+    <body>
+        <h1><i class="fa-solid fa-newspaper"></i> Tin tức Giáo dục VnExpress</h1>
+        <div class="row">
+            <label><i class="fa-solid fa-link"></i> URL RSS: </label>
+            <input id="rssUrl" type="text" value="https://vnexpress.net/rss/giao-duc.rss">
+            <button id="btnCall"><i class="fa-solid fa-cloud-arrow-down"></i> Lấy tin tức</button>
+        </div>
+
+        <table>
+            <caption><i class="fa-solid fa-graduation-cap"></i> Tin tức Giáo dục mới nhất</caption>
+            <thead>
+                <tr>
+                    <th><i class="fa-solid fa-heading"></i> Tiêu đề</th>
+                    <th><i class="fa-solid fa-calendar-days"></i> Ngày đăng</th>
+                    <th><i class="fa-solid fa-align-left"></i> Mô tả</th>
+                </tr>
+            </thead>
+            <tbody id="news_tbody">
+                <tr><td colspan="3">Chưa có dữ liệu</td></tr>
+            </tbody>
+        </table>
+
+        <div class="update-info" id="lastUpdate"></div>
+        <div class="source" id="source"></div>
+
+        <script>
+            // Hàm để hiển thị tin tức
+            function renderNewsRow(item) {
+                const tbody = document.getElementById('news_tbody');
+                const tr = document.createElement('tr');
+                
+                const tdTitle = document.createElement('td');
+                const titleLink = document.createElement('a');
+                titleLink.href = item.link;
+                titleLink.textContent = item.title;
+                titleLink.className = 'news-link';
+                titleLink.target = '_blank';
+                tdTitle.className = 'news-title';
+                tdTitle.appendChild(titleLink);
+                
+                const tdDate = document.createElement('td');
+                tdDate.textContent = formatDate(item.pubDate);
+                tdDate.className = 'news-date';
+                
+                const tdDesc = document.createElement('td');
+                tdDesc.innerHTML = item.description;
+                tdDesc.className = 'news-description';
+                
+                tr.appendChild(tdTitle);
+                tr.appendChild(tdDate);
+                tr.appendChild(tdDesc);
+                
+                return tr;
+            }
+
+            // Hàm định dạng ngày tháng
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            // Hàm lấy dữ liệu RSS từ VnExpress
+            function fetchRSS(url) {
+                return new Promise((resolve, reject) => {
+                    // Sử dụng CORS proxy để tránh lỗi CORS
+                    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+                    
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', proxyUrl, true);
+                    xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    const xmlString = response.contents;
+                                    
+                                    // Parse XML
+                                    const parser = new DOMParser();
+                                    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+                                    
+                                    // Lấy các item từ RSS
+                                    const items = xmlDoc.querySelectorAll('item');
+                                    const newsItems = [];
+                                    
+                                    items.forEach(item => {
+                                        newsItems.push({
+                                            title: item.querySelector('title')?.textContent || '',
+                                            link: item.querySelector('link')?.textContent || '',
+                                            description: item.querySelector('description')?.textContent || '',
+                                            pubDate: item.querySelector('pubDate')?.textContent || ''
+                                        });
+                                    });
+                                    
+                                    resolve({ 
+                                        data: newsItems, 
+                                        source: 'vnexpress.net', 
+                                        url: url 
+                                    });
+                                } catch (e) {
+                                    reject(new Error('Lỗi xử lý dữ liệu: ' + e.message));
+                                }
+                            } else {
+                                reject(new Error('HTTP ' + xhr.status + ': ' + xhr.responseText));
+                            }
+                        }
+                    };
+
+                    xhr.onerror = () => reject(new Error('Lỗi kết nối mạng'));
+                    xhr.send();
+                });
+            }
+
+            // Hàm cập nhật thông tin thời gian
+            function updateLastUpdateTime() {
+                const now = new Date();
+                const formattedDate = now.toLocaleDateString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                document.getElementById('lastUpdate').textContent = 'Cập nhật lần cuối: ' + formattedDate;
+            }
+
+            // Hàm tự động cập nhật tin tức mỗi ngày
+            function setupAutoUpdate() {
+                // Lấy tin tức ngay lập tức
+                fetchAndDisplayNews();
+                
+                // Thiết lập cập nhật tự động mỗi ngày (86400000 ms = 24 giờ)
+                setInterval(fetchAndDisplayNews, 86400000);
+                
+                // Hoặc cập nhật vào một thời điểm cụ thể trong ngày (ví dụ: 6 giờ sáng)
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(now.getDate() + 1);
+                tomorrow.setHours(6, 0, 0, 0);
+                
+                const timeUntilTomorrow = tomorrow - now;
+                setTimeout(() => {
+                    fetchAndDisplayNews();
+                    // Sau lần đầu tiên, cứ 24 giờ lại cập nhật một lần
+                    setInterval(fetchAndDisplayNews, 86400000);
+                }, timeUntilTomorrow);
+            }
+
+            // Hàm lấy và hiển thị tin tức
+            function fetchAndDisplayNews() {
+                const url = document.getElementById('rssUrl').value.trim();
+                const tbody = document.getElementById('news_tbody');
+                tbody.innerHTML = '<tr><td colspan="3">Đang tải...</td></tr>';
+
+                const sourceEl = document.getElementById('source');
+                sourceEl.textContent = '';
+
+                fetchRSS(url)
+                    .then(result => {
+                        const { data, source, url } = result;
+                        
+                        tbody.innerHTML = '';
+                        if (data && data.length > 0) {
+                            data.forEach(item => {
+                                tbody.appendChild(renderNewsRow(item));
+                            });
+                        } else {
+                            tbody.innerHTML = '<tr><td colspan="3">Không có tin tức</td></tr>';
+                        }
+                        
+                        sourceEl.textContent = `Nguồn: ${source} (${url})`;
+                        updateLastUpdateTime();
+                    })
+                    .catch(error => {
+                        tbody.innerHTML = `<tr><td colspan="3">Lỗi: ${error.message}</td></tr>`;
+                        console.error('Error:', error);
+                    });
+            }
+
+            // Sự kiện khi nhấn nút lấy tin tức
+            document.getElementById('btnCall').addEventListener('click', fetchAndDisplayNews);
+
+            // Thiết lập cập nhật tự động khi trang được tải
+            document.addEventListener('DOMContentLoaded', setupAutoUpdate);
+        </script>
+    </body>
+</html>

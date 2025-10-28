@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <title>Nguyễn Thị Bảo Trân</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    h1 { margin-bottom: 8px; }
+    .row { margin: 8px 0; }
+    input[type="text"] { width: 520px; padding: 6px 8px; }
+    button { padding: 6px 12px; }
+    table { border-collapse: collapse; width: 100%; max-width: 720px; margin-top: 16px; }
+    thead th { background: #f0f0f0; }
+    td, th { border: 1px solid #ccc; padding: 8px 10px; }
+    caption { text-align: left; margin-bottom: 6px; font-weight: 600; }
+    .source { margin-top: 8px; font-size: 12px; color: #555; }
+    .fa-solid { margin-right: 6px; color: #444; }
+    button i { margin-right: 6px; }
+  </style>
+    </head>
+    <body>
+        <h1><i class="fa-solid fa-cloud-sun"></i> Call API Dân trí (XHR) và điền vào bảng</h1>
+    <div class="row">
+        <label><i class="fa-solid fa-link"></i> URL API: </label>
+        <input id="apiUrl" type="text" value="https://webapi.dantri.com.vn/misc">
+        <button id="btnCall"><i class="fa-solid fa-cloud-arrow-down"></i> Gọi API</button>
+    </div>
+
+  <table>
+    <caption><i class="fa-solid fa-cloud-sun"></i> Bảng thời tiết</caption>
+    <thead>
+      <tr>
+        <th><i class="fa-solid fa-location-dot"></i> Tên</th>
+        <th><i class="fa-solid fa-temperature-half"></i> Nhiệt độ (°C)</th>
+        <th><i class="fa-solid fa-cloud"></i> Mây (%)</th>
+        <th><i class="fa-solid fa-icons"></i> Biểu tượng</th>
+      </tr>
+    </thead>
+    <tbody id="weather_tbody">
+      <tr><td colspan="4">Chưa có dữ liệu</td></tr>
+    </tbody>
+  </table>
+
+  <div class="source" id="source"></div>
+
+  <script>
+    function renderColumnsRow({ name, temperature, clouds, iconClass, iconLabel }) {
+      const tbody = document.getElementById('weather_tbody');
+      tbody.innerHTML = '';
+      const tr = document.createElement('tr');
+      const tdName = document.createElement('td');
+      const tdTemp = document.createElement('td');
+      const tdClouds = document.createElement('td');
+      const tdIcon = document.createElement('td');
+      tdName.textContent = name ?? '';
+      tdTemp.textContent = (temperature ?? '') === '' ? '' : String(temperature);
+      tdClouds.textContent = (clouds ?? '') === '' ? '' : String(clouds);
+      tdIcon.className = 'icon-cell center';
+      tdIcon.innerHTML = iconClass ? `<i class="fa-solid ${iconClass}" title="${iconLabel || ''}"></i>` : '';
+      tr.appendChild(tdName);
+      tr.appendChild(tdTemp);
+      tr.appendChild(tdClouds);
+      tr.appendChild(tdIcon);
+      tbody.appendChild(tr);
+    }
+
+    function weatherCodeToFA(code, isDay) {
+      // Open-Meteo weather codes mapping → Font Awesome icon classes
+      const c = Number(code);
+if ([0].includes(c)) return isDay ? 'fa-sun' : 'fa-moon';
+      if ([1, 2].includes(c)) return 'fa-cloud-sun';
+      if ([3].includes(c)) return 'fa-cloud';
+      if ([45, 48].includes(c)) return 'fa-smog';
+      if ([51, 53, 55, 56, 57].includes(c)) return 'fa-cloud-rain';
+      if ([61, 63, 65, 80, 81, 82].includes(c)) return 'fa-cloud-showers-heavy';
+      if ([66, 67].includes(c)) return 'fa-cloud-rain';
+      if ([71, 73, 75, 77, 85, 86].includes(c)) return 'fa-snowflake';
+      if ([95, 96, 97, 98, 99].includes(c)) return 'fa-cloud-bolt';
+      return 'fa-cloud';
+    }
+
+    function weatherCodeLabel(code) {
+      const c = Number(code);
+      const map = {
+        0: 'Trời quang',
+        1: 'Ít mây', 2: 'Mây vừa', 3: 'Nhiều mây',
+        45: 'Sương mù', 48: 'Sương mù đóng băng',
+        51: 'Mưa phùn nhẹ', 53: 'Mưa phùn vừa', 55: 'Mưa phùn lớn',
+        56: 'Mưa phùn lạnh nhẹ', 57: 'Mưa phùn lạnh lớn',
+        61: 'Mưa nhẹ', 63: 'Mưa vừa', 65: 'Mưa lớn',
+        66: 'Mưa lạnh nhẹ', 67: 'Mưa lạnh lớn',
+        71: 'Tuyết nhẹ', 73: 'Tuyết vừa', 75: 'Tuyết lớn',
+        77: 'Hạt tuyết', 80: 'Mưa rào nhẹ', 81: 'Mưa rào vừa', 82: 'Mưa rào lớn',
+        85: 'Mưa tuyết rào nhẹ', 86: 'Mưa tuyết rào lớn',
+        95: 'Dông', 96: 'Dông có mưa đá nhẹ', 97: 'Dông có mưa đá lớn'
+      };
+      return map[c] || 'Thời tiết';
+    }
+
+    function findNearestIndex(times, targetIso) {
+      // times: array of ISO strings like '2025-10-28T10:00'
+      const target = new Date(targetIso).getTime();
+      let best = 0;
+      let bestDiff = Infinity;
+      for (let i = 0; i < times.length; i++) {
+        const t = new Date(times[i]).getTime();
+        const d = Math.abs(t - target);
+        if (d < bestDiff) { bestDiff = d; best = i; }
+      }
+      return best;
+    }
+
+    function callDantri(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              const ct = xhr.getResponseHeader('Content-Type') || '';
+              let data = xhr.responseText;
+              if (ct.includes('application/json')) {
+                try { data = JSON.parse(data); } catch (e) { /* giữ nguyên text nếu parse lỗi */ }
+              }
+              resolve({ data, source: 'webapi.dantri.com.vn', url });
+            } else {
+              reject(new Error('HTTP ' + xhr.status + ': ' + xhr.responseText));
+            }
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error'));
+        xhr.send();
+      });
+    }
+
+    function callOpenMeteo(lat = 21.028, lon = 105.834) {
+      return new Promise((resolve, reject) => {
+const api = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=cloudcover`;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', api, true);
+        xhr.setRequestHeader('Accept', 'application/json');
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const data = JSON.parse(xhr.responseText);
+                resolve({ data, source: 'open-meteo', url: api });
+              } catch (e) {
+                reject(e);
+              }
+            } else {
+              reject(new Error('HTTP ' + xhr.status + ': ' + xhr.responseText));
+            }
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('Network error'));
+        xhr.send();
+      });
+    }
+
+    function reverseGeocoding(lat, lon) {
+      return new Promise((resolve, reject) => {
+        const api = `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=vi&count=1`;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', api, true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const data = JSON.parse(xhr.responseText);
+                const r = data?.results?.[0];
+                resolve({ name: r?.name, country: r?.country });
+              } catch (e) { resolve({}); }
+            } else {
+              resolve({});
+            }
+          }
+        };
+        xhr.onerror = () => resolve({});
+        xhr.send();
+      });
+    }
+
+    function viCountryName(country) {
+      if (!country) return '';
+      if (country === 'Vietnam') return 'Việt Nam';
+      return country;
+    }
+
+    document.getElementById('btnCall').addEventListener('click', async () => {
+      const url = document.getElementById('apiUrl').value.trim();
+      const tbody = document.getElementById('weather_tbody');
+      tbody.innerHTML = '<tr><td>Đang tải...</td><td></td></tr>';
+
+      const sourceEl = document.getElementById('source');
+      try {
+        const result = await callDantri(url);
+        sourceEl.innerHTML = '<i class="fa-solid fa-database"></i> Nguồn: ' + `${result.source} (${result.url})`;
+        const data = result.data;
+        if (data && typeof data === 'object' && ('temperature' in data || 'temp' in data) && ('name' in data) && ('clouds' in data)) {
+          const temperature = Number(data.temperature ?? data.temp);
+          const name = String(data.name);
+          const clouds = Number(data.clouds);
+          const iconClass = typeof data.icon === 'string' ? data.icon : null;
+          renderColumnsRow({ name, temperature, clouds, iconClass, iconLabel: 'Icon từ API' });
+          return;
+        }
+// Nếu API không có các trường yêu cầu → fallback
+        throw new Error('API không có trường temperature/name/clouds');
+      } catch (err) {
+        // Bị CORS hoặc lỗi → fallback Open-Meteo
+        const lat = 21.028, lon = 105.834; // Hà Nội mặc định
+        const fb = await callOpenMeteo(lat, lon);
+        sourceEl.innerHTML = '<i class="fa-solid fa-database"></i> Nguồn: ' + `${fb.source} (${fb.url})`;
+        const cw = fb.data?.current_weather || {};
+        const times = fb.data?.hourly?.time || [];
+        const cloudArray = fb.data?.hourly?.cloudcover || [];
+        let clouds = null;
+        if (Array.isArray(times) && Array.isArray(cloudArray) && times.length && cloudArray.length) {
+          const idx = times.indexOf(cw.time);
+          const useIdx = idx !== -1 ? idx : findNearestIndex(times, cw.time || new Date().toISOString());
+          clouds = cloudArray[useIdx];
+        }
+        const geo = await reverseGeocoding(lat, lon);
+        const iconClass = weatherCodeToFA(cw.weathercode, cw.is_day);
+        const iconLabel = weatherCodeLabel(cw.weathercode);
+        const countryLabel = viCountryName(geo?.country);
+        const name = geo?.name ? `${geo.name}${countryLabel ? ', ' + countryLabel : ''}` : `(${lat}, ${lon})`;
+        renderColumnsRow({ name, temperature: cw.temperature, clouds, iconClass, iconLabel });
+      }
+    });
+  </script>
+</body>
+</html>
